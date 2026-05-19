@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento Rápido - Salão da Maria</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+        h2 {
+            color: #075e54;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        input:focus, select:focus {
+            border-color: #25d366;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            background-color: #25d366;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #20ba5a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Agende seu Horário</h2>
+    <form id="form-agendamento">
+        <div class="form-group">
+            <label for="nome">Seu Nome:</label>
+            <input type="text" id="nome" required placeholder="Ex: João Silva">
+        </div>
+
+        <div class="form-group">
+            <label for="servico">Escolha o Serviço:</label>
+            <select id="servico" required>
+                <option value="">Selecione...</option>
+                <option value="Corte de Cabelo (R$ 40,00)">Corte de Cabelo - R$ 40,00</option>
+                <option value="Barba Completa (R$ 30,00)">Barba Completa - R$ 30,00</option>
+                <option value="Combo Cabelo e Barba (R$ 65,00)">Combo Cabelo e Barba - R$ 65,00</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="data">Data:</label>
+            <input type="date" id="data" required>
+        </div>
+
+        <div class="form-group">
+            <label for="hora">Horário:</label>
+            <select id="hora" required>
+                <option value="">Selecione o horário...</option>
+                <option value="09:00">09:00</option>
+                <option value="10:00">10:00</option>
+                <option value="14:00">14:00</option>
+                <option value="15:00">15:00</option>
+                <option value="16:00">16:00</option>
+            </select>
+        </div>
+
+        <button type="submit">Confirmar via WhatsApp 🚀</button>
+    </form>
+</div>
+
+<script>
+    // --- COMPORTAMENTO 1: BLOQUEAR DATAS PASSADAS ---
+    const campoData = document.getElementById('data');
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    campoData.min = `${ano}-${mes}-${dia}`;
+    // ------------------------------------------------
+
+    // --- COMPORTAMENTO 2: ENVIO PARA O SERVIDOR ---
+    document.getElementById('form-agendamento').addEventListener('submit', async function(event) {
+        // Evita que a página recarregue ao clicar no botão
+        event.preventDefault();
+
+        // Captura os valores digitados/selecionados pelo usuário
+        const nome = document.getElementById('nome').value;
+        const servico = document.getElementById('servico').value;
+        const dataOriginal = document.getElementById('data').value;
+        const hora = document.getElementById('hora').value;
+
+        // Formata a data de AAAA-MM-DD para DD/MM/AAAA
+        const dataFormatada = dataOriginal.split('-').reverse().join('/');
+
+        // Organiza os dados em um objeto limpo para mandar pro servidor
+        const dadosDoFormulario = {
+            nome: nome,
+            servico: servico,
+            data: dataFormatada,
+            hora: hora
+        };
+
+        try {
+            // Envia os dados para a API exclusiva da Maria na Vercel
+            // Nota: O número de WhatsApp NÃO está aqui, ele está protegido no arquivo da API.
+            const resposta = await fetch('/api/salao-da-maria.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dadosDoFormulario)
+            });
+
+            // Recebe a resposta do servidor da Vercel
+            const dadosRecebidos = await resposta.json();
+
+            // Se o servidor respondeu com sucesso e mandou a URL do WhatsApp gerada lá dentro:
+            if (resposta.ok && dadosRecebidos.url) {
+                // Redireciona o cliente para o WhatsApp de forma segura
+                window.location.href = dadosRecebidos.url;
+            } else {
+                // Caso aconteça algum erro no servidor (ex: método errado)
+                alert("Erro: " + (dadosRecebidos.error || "Não foi possível gerar o agendamento."));
+            }
+        } catch (erro) {
+            // Trata erros de conexão de internet, por exemplo
+            console.error("Erro na comunicação com o servidor:", erro);
+            alert("Erro de conexão. Por favor, verifique sua internet.");
+        }
+    });
+</script>
+</body>
+</html>
