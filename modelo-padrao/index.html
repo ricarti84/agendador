@@ -219,7 +219,38 @@
 </div>
 
 <script>
-    // --- COMPORTAMENTO 1: BLOQUEAR DATAS PASSADAS ---
+    // --- COMPORTAMENTO 1: MÁSCARA AUTOMÁTICA DE TELEFONE ---
+    const campoTelefone = document.getElementById('telefone');
+
+    if (campoTelefone) {
+        campoTelefone.addEventListener('input', (e) => {
+            let valor = e.target.value;
+            
+            // Remove qualquer caractere que não seja número
+            valor = valor.replace(/\D/g, "");
+            
+            // Aplica a formatação dinamicamente conforme o tamanho
+            if (valor.length > 0) {
+                valor = "(" + valor;
+            }
+            if (valor.length > 3) {
+                valor = valor.slice(0, 3) + ") " + valor.slice(3);
+            }
+            if (valor.length > 10) {
+                // Formato para celular: (XX) XXXXX-XXXX
+                valor = valor.slice(0, 10) + "-" + valor.slice(10, 14);
+            } else if (valor.length > 6) {
+                // Formato temporário: (XX) XXXX-XXXX
+                valor = valor.slice(0, 9) + "-" + valor.slice(9);
+            }
+            
+            // Limita o máximo de caracteres
+            e.target.value = valor.slice(0, 15);
+        });
+    }
+    // -------------------------------------------------------
+
+    // --- COMPORTAMENTO 2: BLOQUEAR DATAS PASSADAS ---
     const campoData = document.getElementById('data');
     const hoje = new Date();
     const ano = hoje.getFullYear();
@@ -227,23 +258,22 @@
     const dia = String(hoje.getDate()).padStart(2, '0');
     campoData.min = `${ano}-${mes}-${dia}`;
 
-    // --- COMPORTAMENTO 2: ENVIO PARA O SERVIDOR ---
+    // --- COMPORTAMENTO 3: ENVIO PARA O SERVIDOR ---
     document.getElementById('form-agendamento').addEventListener('submit', async function(event) {
         event.preventDefault();
 
         const nome = document.getElementById('nome').value;
-        const telfone = document.getElementById('telefone').value || "Não informado";
+        const telefoneComMascara = document.getElementById('telefone').value || "Não informado";
         const servico = document.getElementById('servico').value;
         const dataOriginal = document.getElementById('data').value;
         const hora = document.getElementById('hora').value;
-        const querLembrete = document.getElementById('lembrete').checked ? "Sim, por favor!🔔" : "Não precisa";
+        const querLembrete = document.getElementById('lembrete').checked ? "Sim, por favor! 🔔" : "Não precisa";
 
         const dataFormatada = dataOriginal.split('-').reverse().join('/');
 
-        // Adicionando as novas variáveis ao pacote que vai pra API
         const dadosDoFormulario = {
             nome: nome,
-            telefone: telfone,
+            telefone: telefoneComMascara,
             servico: servico,
             data: dataFormatada,
             hora: hora,
@@ -251,7 +281,7 @@
         };
 
         try {
-            // Chamando o seu arquivo de API na Vercel
+            // Chamando a sua API padrão de demonstração
             const resposta = await fetch('/api/modelo-padrao.js', {
                 method: 'POST',
                 headers: {
