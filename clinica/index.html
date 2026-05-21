@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Consultas - Clínica Viva Bem</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 35px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 480px;
+            border: 1px solid #e2e8f0;
+        }
+        .header-clinica {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .logo-placeholder {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00b4d8;
+            margin-bottom: 8px;
+            display: block;
+            font-weight: bold;
+        }
+        h2 {
+            color: #0077b6;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            background-color: #ffffff;
+            color: #1e293b;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        input::placeholder {
+            color: #94a3b8;
+        }
+        input:focus, select:focus {
+            border-color: #0077b6;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 119, 182, 0.15);
+        }
+        /* Toggle Switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #00a896;
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+        button {
+            width: 100%;
+            background-color: #00a896;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        button:hover {
+            background-color: #028090;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .footer-clinica {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-clinica">
+        <span class="logo-placeholder">⚕️ CLÍNICA VIVA BEM</span>
+        <h2>Agendamento de Consulta</h2>
+    </div>
+
+    <form id="form-agendamento">
+        <div class="form-group">
+            <label for="nome">Nome Completo do Paciente:</label>
+            <input type="text" id="nome" required placeholder="Ex: Carlos Souza">
+        </div>
+
+        <div class="form-group">
+            <label for="telefone">WhatsApp para Contato:</label>
+            <input type="tel" id="telefone" required placeholder="Ex: (81) 99999-9999">
+        </div>
+
+        <div class="form-group">
+            <label for="especialidade">Especialidade Médica:</label>
+            <select id="especialidade" required>
+                <option value="">Selecione a especialidade...</option>
+                <option value="Clínico Geral 🩺">&#x1FA7A; Clínico Geral</option>
+                <option value="Pediatria 👶">&#x1F476; Pediatria</option>
+                <option value="Ginecologia ♀️">&#x2640;&#xFE0F; Ginecologia e Obstetrícia</option>
+                <option value="Cardiologia ❤️">&#x2764;&#xFE0F; Cardiologia</option>
+                <option value="Ortopedia 🦴">&#x1F9B4; Ortopedia</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="data">Data Desejada:</label>
+            <input type="date" id="data" required>
+        </div>
+
+        <div class="form-group">
+            <label for="hora">Período de Preferência:</label>
+            <select id="hora" required>
+                <option value="">Selecione o turno/horário...</option>
+                <option value="Manhã (08:00 às 11:30)">Manhã (08:00 às 11:30)</option>
+                <option value="Tarde (13:30 às 17:00)">Tarde (13:30 às 17:00)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <div class="toggle-container">
+                <label style="margin-bottom: 0;" for="lembrete">Deseja receber o lembrete da consulta?</label>
+                <label class="switch">
+                    <input type="checkbox" id="lembrete" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
+        <button type="submit">Solicitar Agendamento 🚀</button>
+    </form>
+    
+    <div class="footer-clinica">
+        *Aguarde a confirmação da nossa equipe médica após o envio.
+    </div>
+</div>
+
+<script>
+    // --- COMPORTAMENTO 1: MÁSCARA AUTOMÁTICA DE TELEFONE ---
+    const campoTelefone = document.getElementById('telefone');
+
+    campoTelefone.addEventListener('input', (e) => {
+        let valor = e.target.value;
+        
+        // Remove qualquer caractere que não seja número
+        valor = valor.replace(/\D/g, "");
+        
+        // Aplica a formatação dinamicamente conforme o tamanho
+        if (valor.length > 0) {
+            valor = "(" + valor;
+        }
+        if (valor.length > 3) {
+            valor = valor.slice(0, 3) + ") " + valor.slice(3);
+        }
+        if (valor.length > 10) {
+            // Formato para celular: (XX) XXXXX-XXXX
+            valor = valor.slice(0, 10) + "-" + valor.slice(10, 14);
+        } else if (valor.length > 6) {
+            // Formato temporário enquanto digita ou para telefone fixo: (XX) XXXX-XXXX
+            valor = valor.slice(0, 9) + "-" + valor.slice(9);
+        }
+        
+        // Limita o máximo de caracteres visíveis na máscara
+        e.target.value = valor.slice(0, 15);
+    });
+    // -------------------------------------------------------
+
+    // --- COMPORTAMENTO 2: BLOQUEAR DATAS PASSADAS ---
+    const campoData = document.getElementById('data');
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoje.getDate()).padStart(2, '0');
+    campoData.min = `${ano}-${mes}-${dia}`;
+
+    // --- COMPORTAMENTO 3: ENVIO PARA O SERVIDOR ---
+    document.getElementById('form-agendamento').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const nome = document.getElementById('nome').value;
+        const telefoneComMascara = document.getElementById('telefone').value;
+        const specialty = document.getElementById('especialidade').value;
+        const dataOriginal = document.getElementById('data').value;
+        const hora = document.getElementById('hora').value;
+        const querLembrete = document.getElementById('lembrete').checked ? "Sim, por favor! 📲" : "Não";
+
+        const dataFormatada = dataOriginal.split('-').reverse().join('/');
+
+        const dadosDoFormulario = {
+            nome: nome,
+            telefone: telefoneComMascara, // Envia o telefone bonitinho e formatado
+            especialidade: specialty,
+            data: dataFormatada,
+            hora: hora,
+            lembrete: querLembrete
+        };
+
+        try {
+            const resposta = await fetch('/api/clinica.js', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dadosDoFormulario)
+            });
+
+            const dadosRecebidos = await resposta.json();
+
+            if (resposta.ok && dadosRecebidos.url) {
+                window.location.href = dadosRecebidos.url;
+            } else {
+                alert("Erro: " + (dadosRecebidos.error || "Não foi possível gerar a solicitação."));
+            }
+        } catch (erro) {
+            console.error("Erro na comunicação:", erro);
+            alert("Erro de conexão ao gerar a solicitação.");
+        }
+    });
+</script>
+</body>
+</html>
