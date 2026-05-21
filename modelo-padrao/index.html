@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendamento Rápido - Salão da Maria</title>
+    <title>Sistema de Agendamento Profissional - Demonstração</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,7 +12,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #f0f2f5;
+            background-color: #121212;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,60 +20,148 @@
             padding: 20px;
         }
         .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background-color: #1e1e1e;
+            padding: 35px 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
             width: 100%;
             max-width: 450px;
+            border: 1px solid #2d2d2d;
+        }
+        .header-vitrine {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .logo-placeholder {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 8px;
+            display: block;
         }
         h2 {
-            color: #075e54;
-            margin-bottom: 20px;
-            text-align: center;
+            color: #e0e0e0;
+            font-size: 24px;
+            font-weight: 600;
         }
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: 600;
+            margin-bottom: 8px;
+            color: #b3b3b3;
+            font-size: 14px;
+            font-weight: 500;
         }
         input, select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            padding: 12px;
+            border: 1px solid #333;
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border-radius: 8px;
             font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        input::placeholder {
+            color: #666;
         }
         input:focus, select:focus {
             border-color: #25d366;
+            background-color: #333;
             outline: none;
+            box-shadow: 0 0 8px rgba(37, 211, 102, 0.2);
+        }
+        /* Estilização do interruptor (Toggle Switch) para o Lembrete */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #252525;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #444;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #25d366;
+        }
+        input:checked + .slider:before {
+            transform: translateX(24px);
         }
         button {
             width: 100%;
             background-color: #25d366;
             color: white;
             border: none;
-            padding: 12px;
+            padding: 14px;
             font-size: 16px;
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
+            transition: background 0.3s, transform 0.1s;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
         button:hover {
             background-color: #20ba5a;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .footer-vitrine {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: #555;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Agende seu Horário</h2>
+    <div class="header-vitrine">
+        <span class="logo-placeholder">[ SUA LOGO AQUI ]</span>
+        <h2>Agende seu Horário</h2>
+    </div>
+
     <form id="form-agendamento">
         <div class="form-group">
             <label for="nome">Seu Nome:</label>
@@ -81,12 +169,17 @@
         </div>
 
         <div class="form-group">
+            <label for="telefone">Seu WhatsApp (Opcional):</label>
+            <input type="tel" id="telefone" placeholder="Ex: (11) 99999-9999">
+        </div>
+
+        <div class="form-group">
             <label for="servico">Escolha o Serviço:</label>
             <select id="servico" required>
                 <option value="">Selecione...</option>
-                <option value="Corte de Cabelo (R$ 40,00)">Corte de Cabelo - R$ 40,00</option>
-                <option value="Barba Completa (R$ 30,00)">Barba Completa - R$ 30,00</option>
-                <option value="Combo Cabelo e Barba (R$ 65,00)">Combo Cabelo e Barba - R$ 65,00</option>
+                <option value="Corte de Cabelo Premium ✂️">Corte de Cabelo Premium — R$ 40,00</option>
+                <option value="Barba Alinhada e Toalha Quente 🪒">Barba Alinhada — R$ 30,00</option>
+                <option value="Combo Completo (Cabelo + Barba) 💈">Combo Completo — R$ 65,00</option>
             </select>
         </div>
 
@@ -107,8 +200,22 @@
             </select>
         </div>
 
+        <div class="form-group">
+            <div class="toggle-container">
+                <label style="margin-bottom: 0;" for="lembrete">Deseja receber lembrete no WhatsApp?</label>
+                <label class="switch">
+                    <input type="checkbox" id="lembrete" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+
         <button type="submit">Confirmar via WhatsApp 🚀</button>
     </form>
+    
+    <div class="footer-vitrine">
+        Modelo responsivo - Visualize como ficará para seus clientes
+    </div>
 </div>
 
 <script>
@@ -119,33 +226,32 @@
     const mes = String(hoje.getMonth() + 1).padStart(2, '0');
     const dia = String(hoje.getDate()).padStart(2, '0');
     campoData.min = `${ano}-${mes}-${dia}`;
-    // ------------------------------------------------
 
     // --- COMPORTAMENTO 2: ENVIO PARA O SERVIDOR ---
     document.getElementById('form-agendamento').addEventListener('submit', async function(event) {
-        // Evita que a página recarregue ao clicar no botão
         event.preventDefault();
 
-        // Captura os valores digitados/selecionados pelo usuário
         const nome = document.getElementById('nome').value;
+        const telfone = document.getElementById('telefone').value || "Não informado";
         const servico = document.getElementById('servico').value;
         const dataOriginal = document.getElementById('data').value;
         const hora = document.getElementById('hora').value;
+        const querLembrete = document.getElementById('lembrete').checked ? "Sim, por favor!🔔" : "Não precisa";
 
-        // Formata a data de AAAA-MM-DD para DD/MM/AAAA
         const dataFormatada = dataOriginal.split('-').reverse().join('/');
 
-        // Organiza os dados em um objeto limpo para mandar pro servidor
+        // Adicionando as novas variáveis ao pacote que vai pra API
         const dadosDoFormulario = {
             nome: nome,
+            telefone: telfone,
             servico: servico,
             data: dataFormatada,
-            hora: hora
+            hora: hora,
+            lembrete: querLembrete
         };
 
         try {
-            // Envia os dados para a API exclusiva da Maria na Vercel
-            // Nota: O número de WhatsApp NÃO está aqui, ele está protegido no arquivo da API.
+            // Chamando o seu arquivo de API na Vercel
             const resposta = await fetch('/api/modelo-padrao.js', {
                 method: 'POST',
                 headers: {
@@ -154,21 +260,16 @@
                 body: JSON.stringify(dadosDoFormulario)
             });
 
-            // Recebe a resposta do servidor da Vercel
             const dadosRecebidos = await resposta.json();
 
-            // Se o servidor respondeu com sucesso e mandou a URL do WhatsApp gerada lá dentro:
             if (resposta.ok && dadosRecebidos.url) {
-                // Redireciona o cliente para o WhatsApp de forma segura
                 window.location.href = dadosRecebidos.url;
             } else {
-                // Caso aconteça algum erro no servidor (ex: método errado)
                 alert("Erro: " + (dadosRecebidos.error || "Não foi possível gerar o agendamento."));
             }
         } catch (erro) {
-            // Trata erros de conexão de internet, por exemplo
             console.error("Erro na comunicação com o servidor:", erro);
-            alert("Erro de conexão. Por favor, verifique sua internet.");
+            alert("Erro de conexão ao gerar o link.");
         }
     });
 </script>
